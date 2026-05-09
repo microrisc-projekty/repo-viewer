@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+	base: '/repo-viewer/',
 	plugins: [
 		react(),
 		babel({ presets: [reactCompilerPreset()] }),
