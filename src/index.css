@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+body {
+	font-family: sans-serif;
+}
+
+
+table tr td:first-of-type {
+  font-weight: bold;
+  padding-right: 20px;
+}
