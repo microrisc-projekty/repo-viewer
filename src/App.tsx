@@ -39,6 +39,8 @@ function App() {
 		[products, search],
 	);
 
+	const [hwpidDecimal, setHwpidDecimal] = useState(false);
+
 	return (
 		<main className="p-5">
 			<h1 className="text-4xl">IQRF Repository viewer</h1>
@@ -78,6 +80,9 @@ function App() {
 						{Array.from(hwpids).map((hwpid) => (
 							<option value={hwpid} />
 						))}
+						{Array.from(hwpids).map((hwpid) => (
+							<option value={'0x' + hwpid.toString(16)} />
+						))}
 					</datalist>
 					<div className="flex flex-col justify-center items-center">
 						<button
@@ -90,11 +95,24 @@ function App() {
 				</div>
 			</div>
 			<p>Total: {products.length} products</p>
+			<p>
+				<input
+					type="checkbox"
+					name="hwpid_decimal"
+					id="hwpid_decimal"
+					checked={hwpidDecimal}
+					onChange={() => setHwpidDecimal(!hwpidDecimal)}
+				/>
+				<label htmlFor="hwpid_decimal" className="select-none pl-2">
+					Show HWPIDs in decimal (default HEX)
+				</label>
+			</p>
 			<div className="flex flex-col p-5 gap-5 mt-10">
 				{filteredProducts.map((p) => {
 					const manufacturer = manufacturers.find(
 						(m) => m.manufacturerID === p.manufacturerID,
 					);
+
 					return (
 						<div className="flex flex-row gap-10">
 							<div className="w-52 h-52">
@@ -107,8 +125,8 @@ function App() {
 										<td>{p.name}</td>
 									</tr>
 									<tr>
-										<td>HWPID</td>
-										<td>{p.hwpid}</td>
+										<td>HWPID ({hwpidDecimal ? 'dec' : 'hex'})</td>
+										<td>{hwpidDecimal ? p.hwpid : p.hwpid.toString(16)}</td>
 									</tr>
 									<tr>
 										<td>Manufacturer</td>
@@ -118,7 +136,13 @@ function App() {
 									</tr>
 									<tr>
 										<td>RF MODE</td>
-										<td>{p.rfMode}</td>
+										<td>
+											{p.rfMode === 1
+												? 'STD'
+												: p.rfMode === 2
+													? 'LP'
+													: p.rfMode}
+										</td>
 									</tr>
 									<tr>
 										<td>
